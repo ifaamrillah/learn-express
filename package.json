@@ -1,9 +1,6 @@
 {
-  "type": "commonjs",
-  "name": "learn-express",
-  "version": "1.0.0",
-  "main": "main.js",
-  "repository": "https://ifaamrillah@github.com/ifaamrillah/learn-express.git",
-  "author": "ifaamrillah <amrillah.work@gmail.com>",
-  "license": "MIT"
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "express": "^4.21.2"
+  }
 }
