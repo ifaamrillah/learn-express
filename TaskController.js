@@ -45,7 +45,8 @@ class TaskController {
   };
 
   update = (req, res) => {
-    const { id, status } = req.body;
+    const { taskId: id } = req.params;
+    const { status } = req.body;
 
     if (id === undefined) {
       res.status(400).json({
@@ -77,7 +78,7 @@ class TaskController {
   };
 
   remove = (req, res) => {
-    const { id } = req.body;
+    const { taskId: id } = req.params;
 
     if (id === undefined) {
       res.status(400).json({

@@ -1,16 +1,10 @@
 const express = require("express");
-const TaskController = require("./taskController");
+const taskRouter = require("./TaskRouter");
 
 const app = express();
-
-const taskController = new TaskController();
-
 app.use(express.json());
 
-app.get("/api/v1/tasks", taskController.getAll);
-app.post("/api/v1/tasks", taskController.create);
-app.put("/api/v1/tasks", taskController.update);
-app.delete("/api/v1/tasks", taskController.remove);
+app.use("/api/v1/tasks", taskRouter);
 
 const port = process.env.PORT ?? 8000;
 app.listen(port, () => {
