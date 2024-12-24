@@ -1,8 +1,12 @@
 const express = require("express");
-const TaskController = require("./taskController");
 
-const taskRouter = express();
-const taskController = new TaskController();
+const { TaskRepository } = require("./TaskModel");
+const { TaskController } = require("./taskController");
+
+const taskRepository = new TaskRepository();
+const taskController = new TaskController(taskRepository);
+
+const taskRouter = express.Router();
 
 taskRouter.get("/", taskController.getAll);
 taskRouter.post("/", taskController.create);

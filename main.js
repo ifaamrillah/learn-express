@@ -13,6 +13,11 @@ app.use(logger);
 
 app.use("/api/v1/tasks", taskRouter);
 
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).json({ message: "Something went wrong" });
+});
+
 const port = process.env.PORT ?? 8000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

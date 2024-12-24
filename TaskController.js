@@ -1,27 +1,21 @@
 const { randomUUID } = require("crypto");
 const { STATUS_CODES } = require("http");
 
+const { TaskRepository } = require("./TaskModel");
+
 class TaskController {
-  #tasks = [
-    {
-      id: randomUUID(),
-      title: "Task 1",
-      status: "todo",
-    },
-    {
-      id: randomUUID(),
-      title: "Task 2",
-      status: "todo",
-    },
-    {
-      id: randomUUID(),
-      title: "Task 3",
-      status: "onprogress",
-    },
-  ];
+  #repo;
+
+  /**
+   * constructor for TaskController
+   * @param taskRepository {TaskRepository}
+   */
+  constructor(taskRepository) {
+    this.#repo = taskRepository;
+  }
 
   getAll = (req, res) => {
-    res.status(200).json(this.#tasks);
+    res.status(200).json(this.#repo.all());
   };
 
   create = (req, res) => {
@@ -35,13 +29,7 @@ class TaskController {
       return;
     }
 
-    const newTask = {
-      id: randomUUID(),
-      title,
-      status: "todo",
-    };
-    this.#tasks.push(newTask);
-    res.status(201).json(newTask);
+    res.status(201).json(this.#repo.add(title));
   };
 
   update = (req, res) => {
@@ -64,8 +52,8 @@ class TaskController {
       return;
     }
 
-    const index = this.#tasks.findIndex((task) => task.id === id);
-    if (index < 0) {
+    const { ok, data } = this.#repo.updateById(id, status);
+    if (!ok) {
       res.status(400).json({
         status: STATUS_CODES[400],
         message: `task not found`,
@@ -73,8 +61,7 @@ class TaskController {
       return;
     }
 
-    this.#tasks[index].status = status;
-    res.status(200).json(this.#tasks[index]);
+    res.status(200).json(data);
   };
 
   remove = (req, res) => {
@@ -88,8 +75,8 @@ class TaskController {
       return;
     }
 
-    const deletedTask = this.#tasks.find((task) => task.id === id);
-    if (deletedTask === undefined) {
+    const { ok, data } = this.#repo.removeById(id);
+    if (!ok) {
       res.json.status(400).json({
         status: STATUS_CODES[400],
         message: `task not found`,
@@ -97,9 +84,10 @@ class TaskController {
       return;
     }
 
-    this.#tasks = this.#tasks.filter((task) => task.id !== deletedTask.id);
-    res.status(200).json(deletedTask);
+    res.status(200).json(data);
   };
 }
 
-module.exports = TaskController;
+module.exports = {
+  TaskController,
+};
