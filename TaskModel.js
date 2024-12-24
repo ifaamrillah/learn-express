@@ -1,4 +1,19 @@
 const { randomUUID } = require("crypto");
+const { z } = require("zod");
+
+const TASK_STATUS = ["todo", "onprogress", "done"];
+
+const SchemaAddTask = z.object({
+  title: z.string().min(3),
+});
+
+const SchemaUpdateTask = z.object({
+  status: z.enum(TASK_STATUS),
+});
+
+const SchemaTaskId = z.object({
+  taskId: z.string().uuid(),
+});
 
 class TaskRepository {
   #tasks = [
@@ -69,4 +84,7 @@ class TaskRepository {
 
 module.exports = {
   TaskRepository,
+  SchemaAddTask,
+  SchemaUpdateTask,
+  SchemaTaskId,
 };

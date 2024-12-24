@@ -21,14 +21,6 @@ class TaskController {
   create = (req, res) => {
     const { title } = req.body;
 
-    if (title === undefined || title.length < 3) {
-      res.status(400).json({
-        status: STATUS_CODES[400],
-        message: `title is required and must greater than 3 characters`,
-      });
-      return;
-    }
-
     res.status(201).json(this.#repo.add(title));
   };
 
@@ -40,14 +32,6 @@ class TaskController {
       res.status(400).json({
         status: STATUS_CODES[400],
         message: `id is required`,
-      });
-      return;
-    }
-
-    if (status === undefined) {
-      res.status(400).json({
-        status: STATUS_CODES[400],
-        message: `status is required`,
       });
       return;
     }
